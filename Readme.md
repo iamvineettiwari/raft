@@ -1,11 +1,17 @@
-$$ NodeStates $$
+### Introduction
 
-1.  Every node starts as a `FOLLOWER` state
-2.  If `FOLLOWER` suspects `LEADER` failure, it transists to `CANDIDATE` state
-3.  If `CANDIDATE` receives votes from quorum, it transists to `LEADER` state
-4.  If `CANDIDATE` fails to receive votes from quorum or discovers any node with higher term number, it transists to `FOLLOWER` state
-5.  If election times out / votes are equal, a new election is started with higher term number
-6.  If a `LEADER` discovers any new `LEADER` with higher term number, it transists to `FOLLOWER` state
+Raft is a consensus algorithm designed to ensure that all nodes in a distributed system agree on a consistent and reliable sequence of operations. This guarantees a total order of committed entries, which is essential for maintaining correctness and fault tolerance in distributed environments.
+
+In this project, I have implemented the Raft algorithm using a combination of tools and frameworks, including Spring Boot for building the service layer and gRPC for efficient inter-node communication.
+
+### Node States in a Nutshell
+
+- Every node starts in the **FOLLOWER** state.  
+- If a **FOLLOWER** suspects a **LEADER** failure, it transitions to the **CANDIDATE** state.  
+- If a **CANDIDATE** receives votes from a quorum, it transitions to the **LEADER** state.  
+- If a **CANDIDATE** fails to receive votes from a quorum or discovers a node with a higher term number, it transitions back to the **FOLLOWER** state.  
+- If the election times out or results in a tie, a new election is started with an incremented term number.  
+- If a **LEADER** discovers another **LEADER** with a higher term number, it transitions to the **FOLLOWER** state.
 
 ### Three Server configuration steps
 
@@ -24,4 +30,5 @@ java -jar target/Raft-0.0.1-SNAPSHOT.jar --server.port=8002 --id=node3 --peers=l
 - Election timer -> Random (150 - 300) ms, to change timer value, pass `--eTime=<REQ_NUM>`
 - Heartbeat timer -> Random (50 - 150) ms, to change timer value, pass `--hTime=<REQ_NUM>`
 
-### Note: Keep the election timer greater than the heartbeat timer to avoid repeated Leader elctions and instability
+### Note:
+Ensure that the election timeout is set **greater than the heartbeat interval**, and keep the **number of nodes in the system odd** to avoid repeated leader elections and system instability.
