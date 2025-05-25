@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+option java_package = "com.vineet.raft.grpc";
+option java_multiple_files = true;
+
+
+enum CommandInstruction {
+  SET = 0;
+  DELETE = 1;
+}
+
+message Command {
+  CommandInstruction instruction = 1;
+  string key = 2;
+  string value = 3;
+}
+
+message LogEntry {
+  int32 term = 1;
+  Command command = 2;
+}
+
+message LogRequest {
+  string leader = 1;
+  int32 leaderTerm = 2;
+  int32 prefixLength = 3;
+  int32 prefixTerm = 4;
+  int32 commitLength = 5;
+  repeated LogEntry suffix = 6;
+}
+
+message LogResponse {
+  string follower = 1;
+  int32 followerTerm = 2;
+  int32 ackLength = 3;
+  bool success = 4;
+}
+
+message VoteRequest {
+  string candidate = 1;
+  int32 candidateTerm = 2;
+  int32 candidateLogLength = 3;
+  int32 candidateLastTerm = 4;
+}
+
+message VoteResponse {
+  string voter = 1;
+  int32 voterTerm = 2;
+  bool success = 3;
+}
+
+service RaftService {
+  rpc LogRequestCall (LogRequest) returns (LogResponse);
+  rpc VoteRequestCall (VoteRequest) returns (VoteResponse);
+}
