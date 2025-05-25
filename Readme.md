@@ -4,7 +4,7 @@ $$ NodeStates $$
 2.  If `FOLLOWER` suspects `LEADER` failure, it transists to `CANDIDATE` state
 3.  If `CANDIDATE` receives votes from quorum, it transists to `LEADER` state
 4.  If `CANDIDATE` fails to receive votes from quorum or discovers any node with higher term number, it transists to `FOLLOWER` state
-5.  If election times out, a new election is started with higher term number
+5.  If election times out / votes are equal, a new election is started with higher term number
 6.  If a `LEADER` discovers any new `LEADER` with higher term number, it transists to `FOLLOWER` state
 
 ### Three Server configuration steps
