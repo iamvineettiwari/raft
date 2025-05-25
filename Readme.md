@@ -32,3 +32,20 @@ java -jar target/Raft-0.0.1-SNAPSHOT.jar --server.port=8002 --id=node3 --peers=l
 
 ### Note:
 Ensure that the election timeout is set **greater than the heartbeat interval**, and keep the **number of nodes in the system odd** to avoid repeated leader elections and system instability.
+
+### APIs
+
+1. Get the state of the node including current term and current leader
+  ```
+  curl --location 'http://localhost:<node_port>'
+  ```
+2. Submit Command to system
+  ```
+  curl --location 'http://localhost:<any_node_port>/command' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "instruction": "SET" | "DELETE",
+    "key": "message",
+    "value": "Hello World"
+  }'
+  ```
